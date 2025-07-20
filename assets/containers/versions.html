@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown-dark.min.css">
+</head>
+<body style="margin: 0;">
+    <div class="markdown-body" style="width: fit-content;"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://itzispyder.github.io/clickcrystals/scripts/js/clickcrystals.js"></script>
+<script>
+    const FABRIC_MC_VERSIONS = 'https://maven.fabricmc.net/net/fabricmc/yarn/'
+    const GITHUB_RELEASES = 'https://api.github.com/repos/clickcrystals-development/ClickCrystals/releases?per_page=100'
+
+    const body = document.querySelector('.markdown-body')
+
+    async function fetchMCVersions() {
+        var response = await fetch(FABRIC_MC_VERSIONS)
+        var content = await response.text()
+        var releases = content.match(/(\d+\.\d+(.\d+)?)%2Bbuild\.\d+/g)
+        
+        var result = []
+
+        for (var i = 0; i < releases.length; i++) {
+            var release = releases[i]
+            var version = release.match(/(\d+\.\d+(.\d+)?)%2Bbuild\.\d+/)[1]
+            if (!result.includes(version))
+                result.push(version)
+        }
+        
+        return result
+    }
+
+    async function fetchGithubAssets(pageNumber) {
+        var response = await fetch(GITHUB_RELEASES)
+        var content = await response.json()
+        var fetchAgain = content.length == 100
+
+        var result = []
+
+        for (var i = 0; i < content.length; i++) {
+            var release = content[i]
+            var releaseUrl = release.html_url
+
+            for (var j = 0; j < release.assets.length; j++) {
+                var asset = release.assets[j]
+                result.push(format('[%s](%s)', asset.name, releaseUrl))
+            }
+        }
+
+        if (fetchAgain)
+            result.push(...fetchGithubAssets(pageNumber + 1))
+        return result
+    }
+
+    function format(string, ...args) {
+        for (var i = 0; i < args.length; i++)
+            string = string.replace('%s', args[i])
+        return string
+    }
+
+    function generatePlaceholderMarkdown() {
+        var md = ''
+        md += '| What You Have                 | What to get              |\n'
+        md += '|:------------------------------|:-------------------------|\n'
+        md += '| loading minecraft versions... | loading github assets... |'
+        return md
+    }
+
+    async function generateMarkdown() {
+        var md = ''
+        md += '| What You Have | What to get                         |\n'
+        md += '|:--------------|:------------------------------------|\n'
+        md += '| higher..      | how is that even possible?          |\n'
+
+        var versions = await fetchMCVersions()
+        var assets = await fetchGithubAssets(1)
+        var mappings = ClickCrystals.INFO.versionMappings
+
+        for (var i = versions.length - 1; i >= 0; i--) {
+            var version = versions[i]
+            var mappedVersion = mappings[version]
+
+            if (mappedVersion == null) {
+                md += format('| %s | not supported |\n', version)
+            }
+            else {
+                var asset = format('ClickCrystals-%s-(latestVersion).jar', mappedVersion)
+
+                for (var j = 0; j < assets.length; j++) {
+                    var name = assets[j]
+                    var assetMatcher = name.match(/\[ClickCrystals-([\d.]+)-([\d.]+)\.jar\]\(.*\)/)
+
+                    if (assetMatcher == null) {
+                        console.log('INVALID ASSET FORMAT -> ' + name)
+                        continue
+                    }
+
+                    var assetMcVer = assetMatcher[1]
+                    var assetCcVer = assetMatcher[2]
+                    
+                    if (assetCcVer == ClickCrystals.INFO.latest) {
+                        name += ' *recommended'
+                    }
+                    if (assetMcVer == mappedVersion) {
+                        asset = name
+                        break
+                    }
+                }
+
+                md += format('| %s | %s |\n', version, asset)
+            }
+
+            if (version == '1.20') {
+                break
+            }
+        }
+
+        return md
+    }
+
+    async function main() {
+        body.innerHTML = marked.parse(generatePlaceholderMarkdown())
+        var markdown = await generateMarkdown()
+        body.innerHTML = marked.parse(markdown)
+    }
+
+    main()
+
+</script>
+</html>
