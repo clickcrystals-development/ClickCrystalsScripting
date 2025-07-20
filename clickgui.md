@@ -35,4 +35,4 @@ In the browsing screen, you will be provided with lots of modules to interact wi
 | RIGHT CLICK    | edit settings   |
 | MIDDLE CLICK   | edit script     |
 
-
+![image](./assets/display/clickgui/navigation.png)
