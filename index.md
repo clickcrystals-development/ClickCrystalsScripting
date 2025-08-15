@@ -18,3 +18,5 @@ CCS is an interpreted script language, meaning that it determines what each exec
 All ClickCrystal scripts are executed first thing upon game launch. This either includes the creation of new modules or other tasks such as saving the config or printing something into the console. If you want to execute scripts after launch, you can run the command `,ccs run ...`.
 
 **All script files must have a file extension of `.ccs` or `.txt`.** If the file does not have either one of these extensions, they will be skipped.
+
+[[Next -->]](./download.md)

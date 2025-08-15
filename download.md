@@ -19,3 +19,5 @@ If you are unsure what version you should download, all ClickCrystals assets are
 > ex. "ClickCrystals-1.21.8-1.3.4.jar"
 
 You can visit a table of what you need to download from [here](https://github.com/clickcrystals-development/ClickCrystals?tab=readme-ov-file#what-version-should-i-get)
+
+[[<-- Back]](./index.md) | [[Next -->]](./clickgui.md)

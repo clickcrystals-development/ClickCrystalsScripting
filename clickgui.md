@@ -36,3 +36,6 @@ In the browsing screen, you will be provided with lots of modules to interact wi
 | MIDDLE CLICK   | edit script     |
 
 ![image](./assets/display/clickgui/navigation.png)
+
+
+[[<-- Back]](./download.md) | [[Next -->]](./start_scripting.md)
