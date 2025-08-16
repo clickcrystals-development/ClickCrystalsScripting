@@ -1,0 +1,1 @@
+xcopy "../ClickCrystals/DOCUMENTATION" "./DOCUMENTATION" /e /y
