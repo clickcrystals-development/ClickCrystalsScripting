@@ -10,7 +10,7 @@ In this Wiki, we’ll cover these aspects of scripting with ClickCrystals:
 - Reloading your scripts or the entire client
 - Writing and running your own scripts
 
-This documentation is written for versions of ClickCrystals `1.3.6` or above. Please note that there are versions of Minecraft that may be unsupported for this version of ClickCrystals.
+This documentation is written for versions of ClickCrystals `1.3.7` or above. Please note that there are versions of Minecraft that may be unsupported for this version of ClickCrystals.
 
 ## More Information
 CCS is an interpreted script language, meaning that it determines what each execution does before it runs and does not require compilation. This allows ClickCrystals users to easily reload or run their scripts in game.
